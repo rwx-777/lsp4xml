@@ -10,8 +10,9 @@
 package org.eclipse.lsp4xml.extensions.contentmodel.participants.diagnostics;
 
 import org.apache.xerces.impl.dtd.XMLDTDValidator;
-import org.apache.xerces.parsers.XIncludeAwareParserConfiguration;
+import org.apache.xerces.parsers.XMLGrammarCachingConfiguration;
 import org.apache.xerces.xni.XNIException;
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xerces.xni.parser.XMLComponentManager;
 import org.apache.xerces.xni.parser.XMLConfigurationException;
 
@@ -23,11 +24,15 @@ import org.apache.xerces.xni.parser.XMLConfigurationException;
  * </ul>
  *
  */
-class LSPXMLParserConfiguration extends XIncludeAwareParserConfiguration {
+class LSPXMLParserConfiguration extends XMLGrammarCachingConfiguration {
+
+	// the Grammar Pool to be shared similarly
+	public static final XMLGrammarPool fStaticGrammarPool1 = new LSPXMLGrammarPool();
 
 	private final boolean disableDTDValidation;
 
 	public LSPXMLParserConfiguration(boolean disableDTDValidation) {
+		super(fStaticSymbolTable, fStaticGrammarPool1);
 		this.disableDTDValidation = disableDTDValidation;
 	}
 
